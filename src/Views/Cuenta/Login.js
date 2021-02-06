@@ -16,7 +16,7 @@ export default function Login() {
             />
             <Text style = { styles.textbanner }>¡Bienvenido!</Text>
             <LoginForm toastRef = { toastRef } />
-            <Toast ref = { toastRef } position = "center" opacity = {0.9} />
+            <Toast ref = { toastRef } position = "center" opacity = { 0.9 } fadeOutDuration = { 3000 } />
         </View>
     );
 }

@@ -17,3 +17,5 @@ yarn add @react-navigation/drawer@~5.9.0
  yarn add react-native-elements@~2.3.2
 
  yarn add react-native-easy-toast
+
+ yarn add lodash
