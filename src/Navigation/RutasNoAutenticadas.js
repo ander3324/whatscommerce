@@ -9,7 +9,7 @@ import RestaurarPassword from "../Views/Cuenta/RestaurarPassword";
 const Stack = createStackNavigator();
 
 export default function RutasNoAutenticadas() {
-    return() {
+    return(
 
         <NavigationContainer>
             <Stack.Navigator
@@ -24,5 +24,5 @@ export default function RutasNoAutenticadas() {
             </Stack.Navigator>
         </NavigationContainer>
 
-    }
+    );
 }
