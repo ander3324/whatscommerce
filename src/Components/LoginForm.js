@@ -28,7 +28,7 @@ export default function LoginForm(props) {
             //toastRef.current.show(`Bienvenid@ ${email}!`);
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => {
-                console.log("Autenticado!");
+                toastRef.current.show(`Bienvenido ${email}!`);
             }).catch((err) => {
                 console.log("Hubo un error.");
                 toastRef.current.show("Email o contraseña incorrectos.");

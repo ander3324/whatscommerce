@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { validarEmail } from "../Utils/Utils";
 import { isEmpty, size } from "lodash";
 import * as firebase from "firebase";
+import Loading from "../Components/Loading";
 
 export default function RegisterForm(props) {
 
@@ -14,6 +15,7 @@ export default function RegisterForm(props) {
     const [repetirpassword, setrepetirpassword] = useState("");
     const navigation = useNavigation();
     const [show, setshow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     function crearCuenta() {
         if (isEmpty(email) || isEmpty(password) || isEmpty(repetirpassword)) {
@@ -24,6 +26,16 @@ export default function RegisterForm(props) {
             toastRef.current.show("Las contraseñas ingresadas no coinciden.");
         } else if (size(password) < 6) {
             toastRef.current.show("La contraseña debe tener al menos 6 caracteres.");
+        } else {
+            setLoading(true);
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((response) => {
+                toastRef.current.show("Usuario creado correctamente");
+                setLoading(false);
+            }).catch((err) => {
+                toastRef.current.show("Ha ocurrido un error o Usuario ya registrado.");
+                setLoading(false);
+            });
         }
     }
 
@@ -106,7 +118,7 @@ export default function RegisterForm(props) {
             buttonStyle = {{ backgroundColor: "#128C7E" }}
             onPress = { () => navigation.goBack() }
         />
-        
+        <Loading isVisible = { loading } text="Por favor aguarde..." />
     </View>
     );
 }
