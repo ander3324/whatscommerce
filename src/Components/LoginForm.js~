@@ -4,19 +4,12 @@ import { Icon, Input, Button, Divider } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { validarEmail } from "../Utils/Utils";
 import { isEmpty } from "lodash";
-import { validarSesion } from "../Utils/Acciones";
-import * as firebase from "firebase";
 
 export default function LoginForm(props) {
 
-    const { toastRef } = props;
-    const navigation = useNavigation();
-
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
-    const [show, setShow] = useState(false);
-
-    validarSesion();
+    const { toastRef } = props;
 
     const iniciarSesion = () => {
         if (isEmpty(email) || isEmpty(password)) {
@@ -25,14 +18,7 @@ export default function LoginForm(props) {
         } else if (!validarEmail(email)) {
             toastRef.current.show("El email ingresado no es válido.");
         } else {
-            //toastRef.current.show(`Bienvenid@ ${email}!`);
-            firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                console.log("Autenticado!");
-            }).catch((err) => {
-                console.log("Hubo un error.");
-                toastRef.current.show("Email o contraseña incorrectos.");
-            });
+            toastRef.current.show(`Bienvenid@ ${email}!`);
         }
     }
 
@@ -58,30 +44,21 @@ export default function LoginForm(props) {
                     name: "account-outline",
                     color: "#128C7E"
                 }}
-                onChangeText = {(text) => {
-                    setemail(text);
-                }}
-                value = { email }
             />
             <Input 
                 placeholder="Contraseña"  
                 containerStyle = { styles.input } 
                 rightIcon = {{
                     type: "material-community",
-                    name: show ? "eye-off-outline" : "eye-outline",
+                    name: "eye-outline",
                     color: "#128C7E",
-                    onPress: () => setShow(!show)
+                    onPress: () => alert ('Hola')
                 }}
                 leftIcon = {{
                     type: "material-community",
                     name: "security",
                     color: "#128C7E"
                 }}
-                secureTextEntry = { !show }
-                onChangeText = {(text) => {
-                    setpassword(text);
-                }}
-                value = { password }
             />
             <Button
                 title = "Ingresar"
@@ -90,14 +67,7 @@ export default function LoginForm(props) {
                 onPress = { () => iniciarSesion() }
             />
             <Text style = { styles.txtcrearcuenta }>
-                ¿No tenés una cuenta?  
-                <Text 
-                    style = { styles.cuenta }
-                    onPress = {() => navigation.navigate("registrar")}
-                >
-                    {" "}
-                    Crear Cuenta
-                </Text>
+                ¿No tenés una cuenta?  <Text style = { styles.cuenta }>Crear Cuenta</Text>
             </Text>
             <Divider style = {{
                 backgroundColor: "#128C7E",
