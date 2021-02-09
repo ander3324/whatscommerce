@@ -10,3 +10,8 @@ export const validarSesion = () => {
         }
     });
 }
+
+
+export const cerrarSesion = () => {
+    firebase.auth().signOut();
+}

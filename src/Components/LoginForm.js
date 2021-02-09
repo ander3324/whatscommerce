@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Icon, Input, Button, Divider } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { validarEmail } from "../Utils/Utils";
-import { isEmpty } from "lodash";
-import { validarSesion } from "../Utils/Acciones";
+import { isEmpty, split } from "lodash";
+import { validarSesion, cerrarSesion } from "../Utils/Acciones";
 import * as firebase from "firebase";
+import Loading from "../Components/Loading";
 
 export default function LoginForm(props) {
 
@@ -15,8 +16,9 @@ export default function LoginForm(props) {
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
     const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    validarSesion();
+    cerrarSesion();
 
     const iniciarSesion = () => {
         if (isEmpty(email) || isEmpty(password)) {
@@ -25,11 +27,15 @@ export default function LoginForm(props) {
         } else if (!validarEmail(email)) {
             toastRef.current.show("El email ingresado no es válido.");
         } else {
+            setLoading(true);
             //toastRef.current.show(`Bienvenid@ ${email}!`);
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => {
-                toastRef.current.show(`Bienvenido ${email}!`);
+                setLoading(false);
+                toastRef.current.show(`Bienvenido ${split(email, '@')[0]}!`);
+                console.log(firebase.auth().currentUser.email);
             }).catch((err) => {
+                setLoading(false);
                 console.log("Hubo un error.");
                 toastRef.current.show("Email o contraseña incorrectos.");
             });
@@ -126,6 +132,7 @@ export default function LoginForm(props) {
                    />
                </TouchableOpacity>
            </View>
+           <Loading isVisible = { loading } text="Por favor aguarde..." />
         </View>
     );
 };
