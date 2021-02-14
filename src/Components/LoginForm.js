@@ -18,7 +18,7 @@ export default function LoginForm(props) {
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    cerrarSesion();
+    //cerrarSesion();
 
     const iniciarSesion = () => {
         if (isEmpty(email) || isEmpty(password)) {
