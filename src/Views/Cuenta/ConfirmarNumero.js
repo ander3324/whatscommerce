@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Alert } from 'react-native'
 import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Components/Loading";
-import { confirmarCodigo, obtenerToken } from "../../Utils/Acciones";
+import { confirmarCodigo, obtenerToken, obtenerUsuario, addRegistroEspecifico } from "../../Utils/Acciones";
 
 export default function ConfirmarNumero(props) {
 
@@ -14,13 +14,34 @@ export default function ConfirmarNumero(props) {
     const [loading, setLoading] = useState(false);
 
     const confirmarCodigoSMS = async (code) => {
-        //Extraer info de usuario
-        //Obtener el token para push notification
-        //validar y confirmar auth
+        
+        setLoading(true);
+        const resultado = await confirmarCodigo(verificationId, code);
 
-        //const resultado = await confirmarCodigo(verificationId, code);
-       // console.log(resultado);
-        console.log(await obtenerToken());
+        if(resultado) {
+
+            const token = await obtenerToken();
+            const { uid, displayName, photoURL, email, phoneNumber } = obtenerUsuario();
+    
+            const registro = await addRegistroEspecifico("Usuarios", uid, {
+                token,
+                displayName,
+                photoURL,
+                email,
+                phoneNumber,
+                fechaCreacion: new Date()
+            });
+    
+            console.log(`UID: ${uid}. Okey`);
+            setLoading(false);
+        } else {
+            Alert.alert("Error", "Validar código introducido", [{
+                style: "default",
+                text: "Okey"
+            }]);
+            setLoading(false);
+        }
+       
 
     }
 
@@ -44,6 +65,7 @@ export default function ConfirmarNumero(props) {
                     //console.log(code);
                     confirmarCodigoSMS(code);
                 }}
+                secureTextEntry
            />
            <Loading isVisible = { loading } text="Por favor aguarde..." />
         </View>
