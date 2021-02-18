@@ -1,12 +1,14 @@
 import { firebaseapp } from "./Firebase";
-import { Platform, YellowBox } from "react-native";
+import { Platform, LogBox } from "react-native";
 import * as firebase from "firebase";
-import { constant } from "lodash";
+import { constant, map } from "lodash";
 import EnviarConfirmacion from "../Views/Cuenta/EnviarConfirmacion";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import "firebase/firestore";
+import uuid from "random-uuid-v4";
+import { convertirFicheroBlob } from "./Utils";
 
 //Corrección de error bto:
 import { encode, decode } from "base-64";
@@ -19,8 +21,15 @@ if (!global.atob) {
   global.atob = decode;
 }
 
-YellowBox.ignoreWarnings(["Animated"]);
+//YellowBox.ignoreWarnings(["Animated", "Setting a timer", "YellowBox has been replaced"]);
 //LogBox.ignoreLogs("Animated");
+LogBox.ignoreLogs([
+  "Animated",
+  "Setting a timer",
+  "Avatar.onAccessoryPress",
+  "Avatar.showAccessory",
+  "Require cycle"
+]);
 
 const db = firebase.firestore(firebaseapp);
 
@@ -134,7 +143,7 @@ export const addRegistroEspecifico = async (coleccion, doc, data) => {
   await db
     .collection(coleccion)
     .doc(doc)
-    .set(data)
+    .set(data, { merge: true })
     .then((response) => {
       resultado.statusResponse = true;
     })
@@ -143,4 +152,39 @@ export const addRegistroEspecifico = async (coleccion, doc, data) => {
       resultado.error = err;
     });
   return resultado;
+};
+
+export const subirImagenesBatch = async (imagenes, ruta) => {
+  const imagenesurl = [];
+
+  await Promise.all(
+    map(imagenes, async (image) => {
+      const blob = await convertirFicheroBlob(image);
+      const ref = firebase.storage().ref(ruta).child(uuid());
+
+      await ref.put(blob).then(async (result) => {
+        await firebase
+          .storage()
+          .ref(`${ruta}/${result.metadata.name}`)
+          .getDownloadURL()
+          .then((imagenurl) => {
+            imagenesurl.push(imagenurl);
+          });
+      });
+    })
+  );
+
+  return imagenesurl;
+};
+
+export const actualizarPerfil = async (data) => {
+  let respuesta = false;
+  await firebase
+    .auth()
+    .currentUser.updateProfile(data)
+    .then((response) => {
+      respuesta = true;
+    });
+
+  return respuesta;
 };
