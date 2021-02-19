@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Tienda from '../Views/Tienda/Tienda';
-import AddProduct from '../Views/Tienda/AddProduct';
+import AddProduct from '../Views/MiTienda/AddProduct';
 import Contacto from '../Views/Tienda/Contacto';
 import MensajesList from '../Views/Tienda/MensajesList';
 import Detalle from '../Views/Tienda/Detalle';
@@ -18,15 +18,7 @@ export default function TiendaStack() {
                 name="tienda"
                 options={{ headerShown: false }}
             />
-            <Stack.Screen
-                component={AddProduct}
-                name="add-product"
-                options={{ 
-                    title: "Añadir Nuevo Producto",
-                    headerStyle: { backgroundColor: "#128C7E"},
-                    headerTintColor: "#fff"
-                 }}
-            />
+           
             <Stack.Screen
                 component={Detalle}
                 name="detalle"

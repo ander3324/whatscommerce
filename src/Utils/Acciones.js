@@ -241,3 +241,90 @@ export const actualizarTelefono = async (verificationId, code) => {
 
   return response;
 };
+
+export const addRegistro = async (colecion, data) => {
+  const resultado = { error: "", statusreponse: false };
+
+  await db
+    .collection(colecion)
+    .add(data)
+    .then((response) => {
+      resultado.statusreponse = true;
+    })
+    .catch((err) => {
+      resultado.error = err;
+    });
+
+  return resultado;
+};
+
+export const ListarMisProductos = async () => {
+  let productos = [];
+
+  await db
+    .collection("Productos")
+    .where("usuario", "==", obtenerUsuario().uid)
+    .where("status", "==", 1)
+    .get()
+    .then((response) => {
+      response.forEach((doc) => {
+        const producto = doc.data();
+        producto.id = doc.id;
+        productos.push(producto);
+      });
+    })
+    .catch((err) => {
+      console.log("error");
+    });
+
+  return productos;
+};
+
+export const actualizarRegistro = async (coleccion, documento, data) => {
+  let response = { statusresponse: false };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .update(data)
+    .then((result) => (response.statusreponse = true))
+    .catch((err) => console.log(err));
+
+  return response;
+};
+
+export const eliminarProducto = async (coleccion, documento) => {
+  let response = { statusresponse: false };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .delete()
+    .then((result) => (response.statusresponse = true))
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
+};
+
+export const obternerRegistroxID = async (coleccion, documento) => {
+  let response = { statusresponse: false, data: null };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .get()
+    .then((result) => {
+      const producto = result.data();
+      producto.id = result.id;
+
+      response.data = producto;
+      response.statusresponse = true;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
+};

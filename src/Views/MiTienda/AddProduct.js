@@ -22,14 +22,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { cargarImagenesxAspecto } from "../../Utils/Utils";
 import {
   subirImagenesBatch,
-  actualizarRegistro,
+  addRegistro,
   obtenerUsuario,
-  obternerRegistroxID,
 } from "../../Utils/Acciones";
 
-export default function EditarProducto(props) {
-  const { route } = props;
-  const { id } = route.params;
+export default function AddProduct() {
+  //Bindings
   const [titulo, settitulo] = useState("");
   const [descripcion, setdescripcion] = useState("");
   const [precio, setprecio] = useState(0.0);
@@ -39,28 +37,15 @@ export default function EditarProducto(props) {
   const [errores, seterrores] = useState({});
   const [loading, setloading] = useState(false);
   const btnref = useRef();
+
   const navigation = useNavigation();
 
-  useEffect(() => {
-    (async () => {
-      const response = await obternerRegistroxID("Productos", id);
-      console.log(response);
-      const { data } = response;
-      settitulo(data.titulo);
-      setdescripcion(data.descripcion);
-      setprecio(data.precio);
-      setimagenes(data.imagenes);
-      setrating(data.rating);
-      setcategoria(data.categoria);
-    })();
-  }, []);
-
-  const editProducto = async () => {
+  const addProducto = async () => {
     seterrores({});
     if (isEmpty(titulo)) {
       seterrores({ titulo: "El campo título es obligatorio" });
     } else if (isEmpty(descripcion)) {
-      seterrores({ descripcion: "El campo descripcion es obligatorio" });
+      seterrores({ descripcion: "El campo descripción es obligatorio" });
     } else if (!parseFloat(precio) > 0) {
       seterrores({ precio: "Introduzca un precio para el producto" });
     } else if (isEmpty(categoria)) {
@@ -103,17 +88,13 @@ export default function EditarProducto(props) {
         categoria,
       };
 
-      const registrarproducto = await actualizarRegistro(
-        "Productos",
-        id,
-        producto
-      );
+      const registrarproducto = await addRegistro("Productos", producto);
 
       if (registrarproducto.statusreponse) {
         setloading(false);
         Alert.alert(
-          "Actualización completa",
-          "El producto se ha actualizado correctamente",
+          "Registro Exitoso",
+          "El producto se ha registrado correctamente",
           [
             {
               style: "cancel",
@@ -126,8 +107,8 @@ export default function EditarProducto(props) {
         setloading(false);
 
         Alert.alert(
-          "Actualización Fallida",
-          "Ha ocurrido un error al actualizar producto",
+          "Registro Fallido",
+          "Ha ocurrido un error al registrar producto",
           [
             {
               style: "cancel",
@@ -155,7 +136,6 @@ export default function EditarProducto(props) {
         onChangeText={(text) => settitulo(text)}
         inputStyle={styles.input}
         errorMessage={errores.titulo}
-        value={titulo}
       />
       <Input
         placeholder="Descripcion"
@@ -163,7 +143,6 @@ export default function EditarProducto(props) {
         inputStyle={styles.textarea}
         errorMessage={errores.descripcion}
         multiline={true}
-        value={descripcion}
       />
       <Input
         placeholder="Precio"
@@ -171,9 +150,7 @@ export default function EditarProducto(props) {
         inputStyle={styles.input}
         errorMessage={errores.precio}
         keyboardType="name-phone-pad"
-        value={precio.toFixed(2)}
       />
-
       <Text style={styles.txtlabel}>Calidad del Producto o Servicio</Text>
       <AirbnbRating
         count={5}
@@ -189,12 +166,12 @@ export default function EditarProducto(props) {
       <Text style={styles.txtlabel}>Asignar Categoria</Text>
       <Botonera categoria={categoria} setcategoria={setcategoria} />
       <Button
-        title="Editar Producto"
+        title="Agregar Nuevo Producto"
         buttonStyle={styles.btnaddnew}
         ref={btnref}
-        onPress={editProducto}
+        onPress={addProducto}
       />
-      <Loading isVisible={loading} text="Favor espere" />
+      <Loading isVisible={loading} text="Por favor aguarde..." />
     </KeyboardAwareScrollView>
   );
 }
@@ -225,7 +202,7 @@ function SubirImagenes(props) {
     <ScrollView
       style={styles.viewimagenes}
       horizontal={true}
-      showsHorizontalScrollIndicator={false}
+      showsHorizontalScrollIndicator={true}
     >
       {size(imagenes) < 5 && (
         <Icon
@@ -329,10 +306,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 50,
+    borderRadius: 5,
     margin: 5,
     padding: 5,
-    elevation: 3,
+    elevation: 5,
   },
   input: {
     width: "90%",
