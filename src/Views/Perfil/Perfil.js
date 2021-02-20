@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { StyleSheet, Text, View, StatusBar, Alert } from "react-native";
 import { Icon, Avatar, Input } from "react-native-elements";
 import { cargarImagenesxAspecto, validarEmail } from "../../Utils/Utils";
@@ -11,7 +11,8 @@ import {
   enviarConfirmacionPhone,
   reautenticar,
   actualizarEmailFirebase,
-  actualizarTelefono
+  actualizarTelefono,
+  cerrarSesion,
 } from "../../Utils/Acciones";
 
 import Loading from "../../Components/Loading";
@@ -19,6 +20,7 @@ import InputEditable from "../../Components/InputEditable";
 import Modal from "../../Components/Modal";
 import CodeInput from "react-native-code-input";
 import FirebaseRecaptcha from "../../Utils/FirebaseRecaptcha";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Perfil() {
   const [imagenperfil, setimagenperfil] = useState("");
@@ -163,7 +165,7 @@ export default function Perfil() {
   return (
     <View>
       <StatusBar backgroundColor="#128C7E" />
-      <CabeceraBG usuario={usuario} />
+      <CabeceraBG nombre = { displayName } />
       <HeaderAvatar
         usuario={usuario}
         imagenperfil={imagenperfil}
@@ -187,6 +189,16 @@ export default function Perfil() {
         verificationid={verificationid}
         ConfirmarCodigo={ConfirmarCodigo}
       />
+      <Icon
+        name="logout"
+        type="material-community"
+        color="#128c7e"
+        containerStyle={styles.btncontainer}
+        onPress={() => {
+          cerrarSesion();
+        }}
+        reverse
+      />
       <FirebaseRecaptcha referencia={recapcha} />
       <Loading isVisible={loading} text="Por favor aguarde..." />
     </View>
@@ -194,14 +206,13 @@ export default function Perfil() {
 }
 
 function CabeceraBG(props) {
-  const { usuario } = props;
-  const { displayName } = usuario;
+  const { nombre } = props;
 
   return (
     <View>
       <View style={styles.bg}>
         <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
-          {displayName}
+          { nombre }
         </Text>
       </View>
     </View>
@@ -371,5 +382,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 14,
     textAlign: "center",
+  },
+  btncontainer: {
+    position: "relative",
+    bottom: 10,
+    right: 10,
+    shadowColor: "#000000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    alignSelf: "flex-end",
+    marginTop: 20 
   },
 });
