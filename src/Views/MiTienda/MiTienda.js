@@ -67,6 +67,7 @@ export default function MiTienda() {
           navigation.navigate("add-product");
         }}
         reverse
+        height = {10}
       />
     </View>
   );

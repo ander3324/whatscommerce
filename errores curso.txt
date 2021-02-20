@@ -1,6 +1,6 @@
 Windows sin activar
 Errores ortograficos
-Falta de coherencia y buenas practicas en nomenclatura de variables y funciones (no camel case)
+Falta de coherencia y buenas practicas en nomenclatura de variables y funciones (no camel case) poe eje: obtenerRegistro, ObtenerUsuario, actualizaremail
 Ediciòn con cortes y vacpios
 Aparecen còdigos de la nada
 Pobre lenguaje tècnico y mucha repeticiòn de palabras sin aporte ninguno
@@ -8,3 +8,5 @@ Pobre analògia modelo relacional-documentos
 Dar de Alta es Baja?
 Asignar dice igual
 Comidin empieza con dijo contenga
+Verdad? Listo Chicos? Practicamente..., vamos a deha
+Mal escrito: obterner, finalilzar

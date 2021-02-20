@@ -34,6 +34,7 @@ LogBox.ignoreLogs([
   "Avatar.showAccessory",
   "Require cycle",
   "Failed",
+  "Possible"
 ]);
 
 Notifications.setNotificationHandler({
