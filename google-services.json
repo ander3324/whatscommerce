@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "196986825954",
+    "project_id": "whatscommerce-eeb6a",
+    "storage_bucket": "whatscommerce-eeb6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196986825954:android:44ef6410209bc891ca42bb",
+        "android_client_info": {
+          "package_name": "net.iterart.whatscommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196986825954-fc3v3o1pno952cancak8159v1r2r5dhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.iterart.whatscommerce",
+            "certificate_hash": "197936aa6173a89e788fb3e3f3119468e901adbd"
+          }
+        },
+        {
+          "client_id": "196986825954-j2sr93iut054q202mtr6nj8f5bsurdmk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgO1VrWtd_BT3YW1XmFLQdIYAZ2_V1KO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196986825954-j2sr93iut054q202mtr6nj8f5bsurdmk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "196986825954-hvlv61sdp2u4brdkp917iaubr84piok9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.iterart.whatscommerce"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

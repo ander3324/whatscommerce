@@ -455,7 +455,7 @@ export const ListarNotificaciones = async () => {
 
   await db
     .collection("Notificaciones")
-    .where("receiver", "==", ObtenerUsuario().uid)
+    .where("receiver", "==", obtenerUsuario().uid)
     .where("visto", "==", 0)
     .get()
     .then((response) => {

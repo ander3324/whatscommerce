@@ -17,7 +17,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "net.iterart.whatscommerce",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.196986825954-hvlv61sdp2u4brdkp917iaubr84piok9"
+        }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +37,10 @@
         "WRITE_EXTERNAL_STORAGE",
         "NOTIFICACION",
         "USER_FACING_NOTIFICATIONS"
-      ]
+      ],
+      "useNextNotificationsApi": true,
+      "package": "net.iterart.whatscommerce",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

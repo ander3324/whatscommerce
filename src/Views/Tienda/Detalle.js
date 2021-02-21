@@ -124,7 +124,7 @@ export default function Detalle(props) {
                 color="#25d366"
                 size={40}
                 onPress={() => {
-                  const mensajewhatsapp = `Estimado ${nombrevendedor}, mi nombre es ${usuarioactual.displayName}  me interesa el producto ${producto.titulo} que está en WhatsCommerce`;
+                  const mensajewhatsapp = `Estimado ${nombrevendedor}, mi nombre es ${usuarioactual.displayName}.  Me interesa el producto ${producto.titulo}, que está en WhatsCommerce.`;
                   enviarWhatsapp(phonenumber, mensajewhatsapp);
                 }}
               />

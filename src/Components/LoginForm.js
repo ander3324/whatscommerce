@@ -120,6 +120,9 @@ export default function LoginForm(props) {
                         name = "google"
                         color = "#fff"
                         backgroundColor = "transparent"
+                        onPress = { () => {
+                            signInAsync();
+                        } }
                    />
                </TouchableOpacity>
                <TouchableOpacity  style = { styles.btnloginsocialfacebook }>
@@ -136,6 +139,88 @@ export default function LoginForm(props) {
         </View>
     );
 };
+
+/*********LOGICA DE GOOGLE***********************************/
+
+async function signInAsync() {
+    try {
+      await GoogleSignIn.initAsync();
+      //const usuario = await GoogleSignIn.signInSilentlyAsync();
+      await GoogleSignIn.askForPlayServicesAsync(); //usar solo en android
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === "success") {
+        onSignIn(user);
+        setloading(false);
+        return true;
+      } else {
+        setloading(false);
+        alert(JSON.stringify(result));
+        return { cancelled: true };
+      }
+    } catch (e) {
+      setloading(false);
+
+      alert(e.message);
+
+      return { error: true };
+    }
+  }
+
+  function onSignIn(googleUser) {
+    const unsubscribe = firebase
+      .auth()
+      .onAuthStateChanged(function (firebaseUser) {
+        unsubscribe();
+        // Check if we are already signed-in Firebase with the correct user.
+        if (!isUserEqual(googleUser, firebaseUser)) {
+          // Build Firebase credential with the Google ID token.
+          var credential = firebase.auth.GoogleAuthProvider.credential(
+            googleUser.auth.idToken,
+            googleUser.auth.accessToken
+          );
+          // Sign in with credential from the Google user.
+          setloading(true);
+          firebase
+            .auth()
+            .signInWithCredential(credential)
+            .then((response) => {
+              setloading(false);
+            })
+            .catch(function (error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // The email of the user's account used.
+              var email = error.email;
+              // The firebase.auth.AuthCredential type that was used.
+              var credential = error.credential;
+              alert(errorMessage);
+              setloading(false);
+              // ...
+            });
+        } else {
+          alert("Usuario ya está logueado");
+        }
+      });
+  }
+
+  function isUserEqual(googleUser, firebaseUser) {
+    if (firebaseUser) {
+      var providerData = firebaseUser.providerData;
+      for (var i = 0; i < providerData.length; i++) {
+        if (
+          providerData[i].providerId ===
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          providerData[i].uid === googleUser.getBasicProfile().getId()
+        ) {
+          // We don't need to reauth the Firebase connection.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  /**************************** FINAL GOOGLE **************************************** */
 
 const styles = StyleSheet.create({
     container: {
